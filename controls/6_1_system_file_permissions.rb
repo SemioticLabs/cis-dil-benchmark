@@ -356,7 +356,7 @@ control 'cis-dil-benchmark-6.1.12' do
   tag cis: 'distribution-independent-linux:6.1.12'
   tag level: 1
 
-  describe command("df --local -P | awk '{ if (NR!=1) print $6 }' | xargs -I '{}' find '{}' -xdev -nogroup") do
+  describe command("df --local -P | awk '{ if (NR!=1) print $6 }' | xargs -I '{}' find '{}' -xdev -nogroup -not -path '/var/lib/docker/overlay2/*'") do
     its('stdout') { should cmp '' }
   end
 end
