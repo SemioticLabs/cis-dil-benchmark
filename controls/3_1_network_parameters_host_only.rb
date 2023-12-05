@@ -41,6 +41,12 @@ control 'cis-dil-benchmark-3.1.1' do
         it { should be_installed }
       end
 
+      # IP forwarding should be enabled on systems which are running WireGuard
+      describe service('wg-quick@wg0') do
+		it { should be_enabled }
+		it { should be_running }
+      end
+
       describe kernel_parameter(kp) do
         its('value') { should_not be_nil }
         its('value') { should cmp 0 }
