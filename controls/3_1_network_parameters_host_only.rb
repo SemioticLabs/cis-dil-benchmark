@@ -35,9 +35,16 @@ control 'cis-dil-benchmark-3.1.1' do
   end
 
   parameters.each do |kp|
-    describe kernel_parameter(kp) do
-      its('value') { should_not be_nil }
-      its('value') { should cmp 0 }
+    describe.one do
+      # IP forwarding should be enabled on systems which are running Docker
+      describe package('docker') do
+        it { should be_installed }
+      end
+
+      describe kernel_parameter(kp) do
+        its('value') { should_not be_nil }
+        its('value') { should cmp 0 }
+      end
     end
   end
 end
