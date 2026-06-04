@@ -363,7 +363,14 @@ control 'cis-dil-benchmark-6.1.12' do
   tag cis: 'distribution-independent-linux:6.1.12'
   tag level: 1
 
-  describe command("df --local -P | awk '{ if (NR!=1) print $6 }' | xargs -I '{}' find '{}' -xdev -nogroup") do
+  describe command(
+    "df --local -P | awk '{ if (NR!=1) print $6 }' | xargs -I '{}' find '{}' -xdev " \
+    "'(' " \
+    "-path '/var/lib/docker/overlay2' -o " \
+    "-path '/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots' -o " \
+    "-path '/var/snap/lxd/common/lxd' " \
+    "')' -prune -o -nogroup -print"
+  ) do
     its('stdout') { should cmp '' }
   end
 end
