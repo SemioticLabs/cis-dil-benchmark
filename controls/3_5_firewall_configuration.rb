@@ -95,12 +95,22 @@ control 'cis-dil-benchmark-3.5.1.3' do
           it { should match(/(?=.*-A OUTPUT)(?=.*-p #{proto})(?=.*-m state --state NEW,ESTABLISHED)(?=.*-j ACCEPT)/) }
         end
       end
+      rules.each do |rule|
+        describe rule do
+          it { should match(/(?=.*-A OUTPUT)(?=.*-p #{proto})(?=.*-m conntrack --ctstate \S*NEW\S*)(?=.*-j ACCEPT)/) }
+        end
+      end
     end
 
     describe.one do
       rules.each do |rule|
         describe rule do
           it { should match(/(?=.*-A INPUT)(?=.*-p #{proto})(?=.*-m state --state ESTABLISHED)(?=.*-j ACCEPT)/) }
+        end
+      end
+      rules.each do |rule|
+        describe rule do
+          it { should match(/(?=.*-A INPUT)(?=.*-p #{proto})(?=.*-m conntrack --ctstate \S*ESTABLISHED\S*)(?=.*-j ACCEPT)/) }
         end
       end
     end
@@ -194,12 +204,22 @@ control 'cis-dil-benchmark-3.5.2.3' do
           it { should match /(?=.*-A OUTPUT)(?=.*-p #{proto})(?=.*-m state --state NEW,ESTABLISHED)(?=.*-j ACCEPT)/ }
         end
       end
+      rules.each do |rule|
+        describe rule do
+          it { should match /(?=.*-A OUTPUT)(?=.*-p #{proto})(?=.*-m conntrack --ctstate \S*NEW\S*)(?=.*-j ACCEPT)/ }
+        end
+      end
     end
 
     describe.one do
       rules.each do |rule|
         describe rule do
           it { should match /(?=.*-A INPUT)(?=.*-p #{proto})(?=.*-m state --state ESTABLISHED)(?=.*-j ACCEPT)/ }
+        end
+      end
+      rules.each do |rule|
+        describe rule do
+          it { should match /(?=.*-A INPUT)(?=.*-p #{proto})(?=.*-m conntrack --ctstate \S*ESTABLISHED\S*)(?=.*-j ACCEPT)/ }
         end
       end
     end
