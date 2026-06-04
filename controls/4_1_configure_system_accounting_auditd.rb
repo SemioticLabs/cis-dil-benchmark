@@ -193,7 +193,12 @@ control 'cis-dil-benchmark-4.1.7' do
     its('content') { should match(%r{^-w /etc/issue -p wa -k system-locale$}) }
     its('content') { should match(%r{^-w /etc/issue\.net -p wa -k system-locale$}) }
     its('content') { should match(%r{^-w /etc/hosts -p wa -k system-locale$}) }
-    its('content') { should match %r{^-w /etc/sysconfig/network -p wa -k system-locale$} }
+  end
+
+  if file('/etc/sysconfig/network').exist?
+    describe file('/etc/audit/audit.rules') do
+      its('content') { should match %r{^-w /etc/sysconfig/network -p wa -k system-locale$} }
+    end
   end
 
   if uname_machine == 'x86_64' || uname_machine == 'aarch64'
